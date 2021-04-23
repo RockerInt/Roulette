@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roulette", "Roulette\Roulette.csproj", "{4DE53248-33F7-429A-9CA7-B3E52CF13EB2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{50FFE84B-6A9F-421D-AF4A-6B91D510C16D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouletteApi", "API\RouletteApi\RouletteApi.csproj", "{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4DE53248-33F7-429A-9CA7-B3E52CF13EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DE53248-33F7-429A-9CA7-B3E52CF13EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DE53248-33F7-429A-9CA7-B3E52CF13EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DE53248-33F7-429A-9CA7-B3E52CF13EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15} = {50FFE84B-6A9F-421D-AF4A-6B91D510C16D}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {51457EFE-3EA0-4D32-AE25-C0AC649E53AB}
+		SolutionGuid = {A193DAB4-8628-489D-B1BA-4B7ABF73BFAE}
 	EndGlobalSection
 EndGlobal

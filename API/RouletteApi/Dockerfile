@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Roulette/Roulette.csproj", "Roulette/"]
-RUN dotnet restore "Roulette/Roulette.csproj"
+COPY ["API/RouletteApi/RouletteApi.csproj", "RouletteApi/"]
+RUN dotnet restore "RouletteApi/RouletteApi.csproj"
 COPY . .
-WORKDIR "/src/Roulette"
-RUN dotnet build "Roulette.csproj" -c Release -o /app/build
+WORKDIR "/src/API/RouletteApi"
+RUN dotnet build "RouletteApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Roulette.csproj" -c Release -o /app/publish
+RUN dotnet publish "RouletteApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Roulette.dll"]
+ENTRYPOINT ["dotnet", "RouletteApi.dll"]
