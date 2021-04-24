@@ -25,14 +25,14 @@ namespace RouletteApi.Controllers
 
         [HttpGet]
         [Route("Get")]
-        [ProducesResponseType(typeof(IEnumerable<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<RouletteBase>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetRoulettes() =>
             await Task.FromResult(
                 Utilities.Utilities.TryCatch(
                     () =>
                     {
                         _logger.LogInformation("Begin HttpGet call GetRoulettes");
-                        List<Roulette> response = _repository.Get();
+                        List<RouletteBase> response = _repository.Get();
                         if (!response?.Any() ?? false)
                         {
                             var message = "No results found";

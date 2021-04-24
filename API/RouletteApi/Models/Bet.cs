@@ -8,7 +8,7 @@ namespace RouletteApi.Models
     [Serializable]
     public class Bet : IValidatableObject
     {
-        public uint? Number { get; set; }
+        public nint? Number { get; set; }
         public Color Color { get; set; } = Color.Black;
         public decimal BetValue { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

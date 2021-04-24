@@ -27,6 +27,7 @@ namespace Roulettes.UnitTest
         private Roulette FakeOpenRoulette;
         private Roulette FakeCloseRoulette;
         private BetUser FakeBet;
+        private RouletteResult FakeRouletteResult;
 
         public RoulettesControllerTests()
         {
@@ -46,19 +47,20 @@ namespace Roulettes.UnitTest
             FakeOpenRoulette = GetRouletteFake(FakeOpenRouletteId, true);
             FakeCloseRoulette = GetRouletteFake(FakeCloseRouletteId, false);
             FakeBet = GetBetFake(FakeBetId, 4, 5000m);
+            FakeRouletteResult = GetRouletteResultFake(FakeRouletteId, new List<BetUser>() { FakeBet });
 
             _rouletteRepositoryMock.Setup(x => x.GetById(It.Is<Guid>(x => x == FakeRouletteId)))
                 .Returns(FakeRoulette);
             _rouletteRepositoryMock.Setup(x => x.GetById(It.Is<Guid>(x => x == FakeOpenRouletteId)))
                 .Returns(FakeOpenRoulette);
             _rouletteRepositoryMock.Setup(x => x.Get())
-                .Returns(new List<Roulette>() { FakeRoulette });
+                .Returns(new List<RouletteBase>() { FakeRoulette, FakeRouletteResult });
             _rouletteRepositoryMock.Setup(x => x.Create())
                 .Returns(FakeRouletteId);
             _rouletteRepositoryMock.Setup(x => x.OpenBets(It.Is<Guid>(x => x == FakeRouletteId)))
                 .Returns(true);
             _rouletteRepositoryMock.Setup(x => x.CloseBets(It.Is<Guid>(x => x == FakeOpenRouletteId)))
-                .Returns(new List<BetUser>() { FakeBet });
+                .Returns(FakeRouletteResult);
             _rouletteRepositoryMock.Setup(x => x.Exist(It.Is<Guid>(x => x == FakeRouletteId)))
                 .Returns(true);
             _rouletteRepositoryMock.Setup(
@@ -101,7 +103,7 @@ namespace Roulettes.UnitTest
         {
             var actionResult = RouletteController.GetRoulettes().Result;
             Assert.AreEqual(((ObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
-            Assert.AreEqual(((List<Roulette>)((ObjectResult)actionResult).Value).FirstOrDefault().Id, FakeRouletteId);
+            Assert.AreEqual(((List<RouletteBase>)((ObjectResult)actionResult).Value).FirstOrDefault().Id, FakeRouletteId);
         }
         [Test]
         public void CreateTest()
@@ -129,7 +131,7 @@ namespace Roulettes.UnitTest
         {
             var actionResult = RouletteController.CloseBets(FakeOpenRouletteId).Result;
             Assert.AreEqual(((ObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
-            Assert.AreEqual(((List<BetUser>)((ObjectResult)actionResult).Value).FirstOrDefault().UserId, FakeBetId);
+            Assert.AreEqual(((RouletteResult)((ObjectResult)actionResult).Value).Id, FakeRouletteId);
         }
         #endregion
 
@@ -179,7 +181,9 @@ namespace Roulettes.UnitTest
         #endregion
 
         private static Roulette GetRouletteFake(Guid fakeRouletteId, bool isOpen) => new() { Id = fakeRouletteId, IsOpen = isOpen };
-        private static BetUser GetBetFake(Guid fakeUserId, uint? number, decimal betValue)
+        private static RouletteResult GetRouletteResultFake(Guid fakeRouletteId, List<BetUser> bets) 
+            => new() { Id = fakeRouletteId, Color = RouletteApi.Models.Enums.Color.Black, Number = 9, Bets = bets };
+        private static BetUser GetBetFake(Guid fakeUserId, nint? number, decimal betValue)
             => new() 
             {
                 UserId = fakeUserId,

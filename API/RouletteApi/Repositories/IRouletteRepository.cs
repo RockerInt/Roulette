@@ -8,11 +8,11 @@ namespace RouletteApi.Repositories
     public interface IRouletteRepository
     {
         bool Exist(Guid key);
-        List<Roulette> Get();
+        List<RouletteBase> Get();
         Roulette GetById(Guid id);
         Guid Create();
         bool OpenBets(Guid id);
         bool MakeBet(Guid keyRoulette, Guid userId, Bet bet);
-        List<BetUser> CloseBets(Guid id);
+        RouletteResult CloseBets(Guid id);
     }
 }
