@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{50FFE84B-6A9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouletteApi", "API\RouletteApi\RouletteApi.csproj", "{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3492EC20-AC60-4A31-9BF2-0A324474F3CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Roulette.UnitTest", "Tests\Roulette.UnitTest\Roulette.UnitTest.csproj", "{CB418C5F-A537-4110-A4DE-1B05F0795E35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +21,17 @@ Global
 		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB418C5F-A537-4110-A4DE-1B05F0795E35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB418C5F-A537-4110-A4DE-1B05F0795E35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB418C5F-A537-4110-A4DE-1B05F0795E35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB418C5F-A537-4110-A4DE-1B05F0795E35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2668977E-4A3F-4B2C-8FEE-4E7C92815E15} = {50FFE84B-6A9F-421D-AF4A-6B91D510C16D}
+		{CB418C5F-A537-4110-A4DE-1B05F0795E35} = {3492EC20-AC60-4A31-9BF2-0A324474F3CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A193DAB4-8628-489D-B1BA-4B7ABF73BFAE}

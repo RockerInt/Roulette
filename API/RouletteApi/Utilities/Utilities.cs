@@ -16,7 +16,7 @@ namespace Utilities
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             Formatting = Formatting.Indented
         };
-
+        public static Guid? ToGuid(this string id) => Guid.TryParse(id, out Guid guid) ? guid : null;
         public static string JsonSerialize(this object obj, JsonSerializerSettings settings = null) => JsonConvert.SerializeObject(obj, settings ?? _settings);
         public static T ToEntity<T>(this string obj) where T : class, new()
         {

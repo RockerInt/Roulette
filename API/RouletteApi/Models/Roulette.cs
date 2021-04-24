@@ -8,11 +8,11 @@ namespace RouletteApi.Models
     {
         public Roulette()
         {
-            Bets = new List<UserBet>();
+            Bets = new List<BetUser>();
         }
 
-        public Guid Key { get; set; }
-        public bool OpenBets { get; set; } = false;
-        public IEnumerable<UserBet> Bets { get; set; }
+        public Guid Id { get; set; }
+        public bool IsOpen { get; set; } = false;
+        public List<BetUser> Bets { get; set; }
     }
 }

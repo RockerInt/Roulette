@@ -12,5 +12,7 @@ namespace RouletteApi.Repositories
         Roulette GetById(Guid id);
         Guid Create();
         bool OpenBets(Guid id);
+        bool MakeBet(Guid keyRoulette, Guid userId, Bet bet);
+        List<BetUser> CloseBets(Guid id);
     }
 }
