@@ -1,6 +1,6 @@
 # Roulettes
 
-This is a test project for handling Roulette for betting, which implements * .NET 5.0, Redis, AWS CloudWatch Logs and Docker *.
+This is a test project for handling Roulette for betting, which implements *.NET 5.0, Redis, AWS CloudWatch Logs and Docker*.
 
 
 ## Build & Test
