@@ -7,6 +7,7 @@ using RouletteApi.Models;
 using RouletteApi.Repositories;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Utilities;
 
 namespace RouletteApi.Controllers
 {
@@ -25,14 +26,14 @@ namespace RouletteApi.Controllers
 
         [HttpGet]
         [Route("Get")]
-        [ProducesResponseType(typeof(List<RouletteBase>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<dynamic>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetRoulettes() =>
             await Task.FromResult(
                 Utilities.Utilities.TryCatch(
                     () =>
                     {
                         _logger.LogInformation("Begin HttpGet call GetRoulettes");
-                        List<RouletteBase> response = _repository.Get();
+                        var response = _repository.Get();
                         if (!response?.Any() ?? false)
                         {
                             var message = "No results found";
@@ -51,14 +52,14 @@ namespace RouletteApi.Controllers
         [Route("Get/{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(Roulette), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(object), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetRoulette(Guid id) =>
             await Task.FromResult(
                 Utilities.Utilities.TryCatch(
                     () =>
                     {
                         _logger.LogInformation("Begin HttpGet call GetRoulettes with request: {@request}", id);
-                        Roulette response = _repository.GetById(id);
+                        object response = _repository.GetById(id);
                         if (response is null)
                         {
                             var message = $"The property with id {id} do not exist";
@@ -127,37 +128,39 @@ namespace RouletteApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> MakeBet([FromHeader] Guid userId, [FromBody] Guid rouletteId, [FromBody] Bet bet) =>
+        public async Task<IActionResult> MakeBet([FromBody] MakeBet makeBet) =>
             await Task.FromResult(
                 Utilities.Utilities.TryCatch(
                     () =>
                     {
+                        var _userId = Request.Headers["UserId"];
                         _logger.LogInformation(
                             "Begin HttpPost call MakeBet with request: {@request}",
                             new
                             {
-                                RouletteId = rouletteId,
-                                UserId = userId,
-                                Bet = bet
+                                makeBet.RouletteId,
+                                UserId = _userId,
+                                makeBet.Bet
                             }
                         );
-                        if (ModelState.IsValid)
+                        var userId = Convert.ToString(_userId);
+                        if (ModelState.IsValid && !string.IsNullOrWhiteSpace(userId))
                         {
-                            if (!_repository.Exist(rouletteId))
+                            if (!_repository.Exist(makeBet.RouletteId))
                             {
-                                var message = $"The roulette with id {rouletteId} do not exist";
+                                var message = $"The roulette with id {makeBet.RouletteId} do not exist";
                                 _logger.LogInformation("HttpPost MakeBet response: {@response}", message);
 
                                 return NotFound(message);
                             }
-                            if (!_repository.GetById(rouletteId).IsOpen)
+                            if (!_repository.GetById(makeBet.RouletteId).IsOpen)
                             {
-                                var message = $"The roulette with id {rouletteId} is not open";
+                                var message = $"The roulette with id {makeBet.RouletteId} is not open";
                                 _logger.LogInformation("HttpPost OpenBets response: {@response}", message);
 
                                 return Conflict(message);
                             }
-                            var response = _repository.MakeBet(rouletteId, userId, bet);
+                            var response = _repository.MakeBet(makeBet.RouletteId, userId.ToGuid().Value, makeBet.Bet);
                             _logger.LogInformation("HttpPost MakeBet response: {@response}", response);
 
                             return Ok(response);

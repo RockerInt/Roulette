@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+
+  roulette:
+    image: ${DOCKER_REGISTRY-}roulette
+    build:
+      context: .
+      dockerfile: API/RouletteApi/Dockerfile
+    depends_on: 
+      - cache
+      - nosqldata
+    networks:
+      - roulettenet
+    links:
+      - cache
+      - nosqldata
+
+  cache:
+    image: redis:alpine
+    networks:
+      - roulettenet
+
+  nosqldata:
+    image: mongo 
+    networks:
+      - roulettenet
+
+networks:
+  roulettenet:
+    driver: "bridge"
+

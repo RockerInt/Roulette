@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -54,7 +55,7 @@ namespace Roulettes.UnitTest
             _rouletteRepositoryMock.Setup(x => x.GetById(It.Is<Guid>(x => x == FakeOpenRouletteId)))
                 .Returns(FakeOpenRoulette);
             _rouletteRepositoryMock.Setup(x => x.Get())
-                .Returns(new List<RouletteBase>() { FakeRoulette, FakeRouletteResult });
+                .Returns(new List<dynamic>() { FakeRoulette, FakeRouletteResult });
             _rouletteRepositoryMock.Setup(x => x.Create())
                 .Returns(FakeRouletteId);
             _rouletteRepositoryMock.Setup(x => x.OpenBets(It.Is<Guid>(x => x == FakeRouletteId)))
@@ -69,7 +70,7 @@ namespace Roulettes.UnitTest
                     It.Is<Guid>(x => x == FakeBetId),
                     FakeBet.Bet
                 )).Returns(true);
-            
+
             Roulette nullObj = null;
             _rouletteRepositoryMock.Setup(x => x.GetById(It.Is<Guid>(x => x == FakeNotFoundRouletteId)))
                 .Returns(nullObj);
@@ -84,10 +85,18 @@ namespace Roulettes.UnitTest
             _rouletteRepositoryMock.Setup(x => x.Exist(It.Is<Guid>(x => x == FakeCloseRouletteId)))
                 .Returns(true);
 
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["UserId"] = FakeBetId.ToString();
             RouletteController = new RoulettesController(
                 _rouletteRepositoryMock.Object,
                 _loggerMock.Object
-            );
+            )
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = httpContext,
+                }
+            };
         }
 
         #region Success Cases
@@ -103,7 +112,7 @@ namespace Roulettes.UnitTest
         {
             var actionResult = RouletteController.GetRoulettes().Result;
             Assert.AreEqual(((ObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
-            Assert.AreEqual(((List<RouletteBase>)((ObjectResult)actionResult).Value).FirstOrDefault().Id, FakeRouletteId);
+            Assert.AreEqual(((List<dynamic>)((ObjectResult)actionResult).Value).FirstOrDefault().Id, FakeRouletteId);
         }
         [Test]
         public void CreateTest()
@@ -122,7 +131,7 @@ namespace Roulettes.UnitTest
         [Test]
         public void MakeBetTest()
         {
-            var actionResult = RouletteController.MakeBet(FakeBetId, FakeOpenRouletteId, FakeBet.Bet).Result;
+            var actionResult = RouletteController.MakeBet(new MakeBet() { RouletteId = FakeOpenRouletteId, Bet = FakeBet.Bet }).Result;
             Assert.AreEqual(((ObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
             Assert.AreEqual(((ObjectResult)actionResult).Value, true);
         }
@@ -157,13 +166,13 @@ namespace Roulettes.UnitTest
         [Test]
         public void MakeBetNotFoundTest()
         {
-            var actionResult = RouletteController.MakeBet(FakeBetId, FakeNotFoundRouletteId, FakeBet.Bet).Result;
+            var actionResult = RouletteController.MakeBet(new MakeBet() { RouletteId = FakeNotFoundRouletteId, Bet = FakeBet.Bet }).Result;
             Assert.AreEqual(((NotFoundObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.NotFound);
         }
         [Test]
         public void MakeBetCloseTest()
         {
-            var actionResult = RouletteController.MakeBet(FakeBetId, FakeCloseRouletteId, FakeBet.Bet).Result;
+            var actionResult = RouletteController.MakeBet(new MakeBet() { RouletteId = FakeCloseRouletteId, Bet = FakeBet.Bet }).Result;
             Assert.AreEqual(((ConflictObjectResult)actionResult).StatusCode, (int)System.Net.HttpStatusCode.Conflict);
         }
         [Test]
@@ -181,10 +190,10 @@ namespace Roulettes.UnitTest
         #endregion
 
         private static Roulette GetRouletteFake(Guid fakeRouletteId, bool isOpen) => new() { Id = fakeRouletteId, IsOpen = isOpen };
-        private static RouletteResult GetRouletteResultFake(Guid fakeRouletteId, List<BetUser> bets) 
+        private static RouletteResult GetRouletteResultFake(Guid fakeRouletteId, List<BetUser> bets)
             => new() { Id = fakeRouletteId, Color = RouletteApi.Models.Enums.Color.Black, Number = 9, Bets = bets };
-        private static BetUser GetBetFake(Guid fakeUserId, nint? number, decimal betValue)
-            => new() 
+        private static BetUser GetBetFake(Guid fakeUserId, int? number, decimal betValue)
+            => new()
             {
                 UserId = fakeUserId,
                 Bet = new()

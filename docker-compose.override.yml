@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+
+  roulette:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - AWS_ACCESS_KEY_ID=ASIAUDBHF2FHSJ5BS66M
+      - AWS_SECRET_ACCESS_KEY=LUduYXCpPCLh5CbA7UeXyRWfPXhy0ixsglJZCv5p
+      - AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEKj//////////wEaCXVzLWVhc3QtMSJGMEQCIFWc0gykHE4kGYte/aEzfW6Zu4pBwLzEHNV07Os/HVoLAiA9LTXIH8Bo/JzQa7bik4fUucf6Z+3rhz7pcyXZ5cddTiqfAwghEAEaDDI4MTQwMjUyODA3OSIMg6A09kyWw6hQLgehKvwCGf8dRBrlwH5FGPD44ScwQFKczbzfGn1VT+kms0hgU2J+Aqrgn2RciUZNqDqRn/Dm6Z3bn7brsnjiKUlFa5HzozufSqmbyY9Y+74bKhW8XyUiTyoT9q9WCSBD2mDz/CnLGpDpHvHJZAfWTuyG2zuAjh7hUPep/kJ5vPFz8ia6AnW592yk/vwkBoDq9folbiRZS/QgRRldwf0HSDgMRTJhZ9i1igsAYbQd8Gk6WgRUM8T7CtES1If6w9l2AIWpTLtyBpoIOFs6dOHvaDYaQ/EcIr54eBwuKg3pBWJFLfASUSHpMUwZ5PKflH0UxebQFqLy0PrdbKvcVufn3hq+zGdKwx+JIm6P/yPY9uEXHHgKdG0pvdmrmQgJP0hjKgLOWguIz0HaZz0wBFsErtIhSdymCS8G3cn6SeGDJYMJMNpaUq/wx8VKCFWIsm493Hj7bNWCJcsmHDHJXPMTaDZKuH7noRTh3jV5CNQLdOloihiCKXvCrtGkZgH7tcZ0nfIwzPeXhAY6pwGaLPslPAi9fvl3SzIID30OkxEMt7yBEftd+VwnHjFhHzsl4EoAhJR07B6SnOOzZUzi+n0+ZxFpCoI7R+9ubg2liUhW5CCdkCD4T3kR6iGfaXEHME5ZnpdZ4KSVY/TOdSEsbsYSIB6AXJz5T3Hh8s+anBBtn1w3m1DxuOQEzxf1fPJlHvdP2rXRcFDgID2e9kjfe1LWhOlx8okYk1GKB5RC4Ev9dLPAHA==
+    ports:
+      - "5000:80"
+
+  cache:
+    ports:
+      - 6379:6379
+    volumes:
+      - ~/.aspnet/redis:/var/lib/redis
+      - ~/.aspnet/redis-data:/data
+
+  nosqldata:
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/.aspnet/Mongo:/data/db

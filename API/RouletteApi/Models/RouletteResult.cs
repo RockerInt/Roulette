@@ -12,7 +12,7 @@ namespace RouletteApi.Models
             Bets = new List<BetUser>();
         }
 
-        public nint Number { get; set; }
+        public int Number { get; set; }
         public Color Color { get; set; }
     }
 }
